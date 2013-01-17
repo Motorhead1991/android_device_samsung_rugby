@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-$(call inherit-product, $(LOCAL_PATH)/apache.mk)
-$(call inherit-product, $(LOCAL_PATH)/build_props.mk)
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+# This is where we'd set a backup provider if we had one
+#$(call inherit-product, device/sample/products/backup_overlay.mk)
+$(call inherit-product, device/samsung/apache/apache.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full.mk)
 
-# The gps config appropriate for this device
+# Discard inherited values and use our own instead.
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
 # Set those variables here to overwrite the inherited values.

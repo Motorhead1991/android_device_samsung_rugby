@@ -26,15 +26,13 @@ PRODUCT_COPY_FILES += \
 
 # Support files
 PRODUCT_COPY_FILES += \
-    frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-    frameworks/base/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
-    frameworks/base/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
-    frameworks/base/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-    frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
-    frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-    frameworks/base/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
-    frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
+    frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
+    frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
+    frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
+    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
 
 # Feature live wallpaper
 PRODUCT_COPY_FILES += \
@@ -42,6 +40,7 @@ PRODUCT_COPY_FILES += \
 
 # Media configuration xml file
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/config/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/config/media_profiles.xml:system/etc/media_profiles.xml
 
 PRODUCT_COPY_FILES += \
@@ -49,10 +48,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/config/init.qcom.usb.rc:root/init.qcom.usb.rc \
     $(LOCAL_PATH)/config/ueventd.qcom.rc:root/ueventd.qcom.rc \
     $(LOCAL_PATH)/config/vold.fstab:system/etc/vold.fstab \
+    $(LOCAL_PATH)/config/fstab.qcom:root/fstab.qcom \
     $(LOCAL_PATH)/config/nvram_net.txt:system/vendor/firmware/nvram_net.txt \
     $(LOCAL_PATH)/recovery/fix_reboot.sh:recovery/root/sbin/fix_reboot.sh \
     $(LOCAL_PATH)/recovery/fix_brightness.sh:recovery/root/sbin/fix_brightness.sh \
-    $(LOCAL_PATH)/prebuilt/FileManager.apk:system/app/FileManager.apk \
     $(LOCAL_PATH)/prebuilt/Torch.apk:system/app/Torch.apk \
     $(LOCAL_PATH)/prebuilt/get_macaddrs:system/bin/get_macaddrs
 
@@ -63,16 +62,18 @@ PRODUCT_COPY_FILES += \
 # Keychars and keylayout files
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keyfiles/Broadcom_Bluetooth_HID.kcm.bin:system/usr/keychars/Broadcom_Bluetooth_HID.kcm.bin \
-    $(LOCAL_PATH)/keyfiles/ancora_keypad_numeric.kcm.bin:system/usr/keychars/apache_keypad_numeric.kcm.bin \
-    $(LOCAL_PATH)/keyfiles/ancora_keypad_qwerty.kcm.bin:system/usr/keychars/apache_keypad_qwerty.kcm.bin \
+    $(LOCAL_PATH)/keyfiles/apache_keypad_numeric.kcm.bin:system/usr/keychars/apache_keypad_numeric.kcm.bin \
+    $(LOCAL_PATH)/keyfiles/apache_keypad_qwerty.kcm.bin:system/usr/keychars/apache_keypad_qwerty.kcm.bin \
     $(LOCAL_PATH)/keyfiles/sec_jack.kl:system/usr/keylayout/sec_jack.kl \
     $(LOCAL_PATH)/keyfiles/sec_key.kl:system/usr/keylayout/sec_key.kl \
     $(LOCAL_PATH)/keyfiles/sec_power_key.kl:system/usr/keylayout/sec_power_key.kl \
+    $(LOCAL_PATH)/keyfiles/sec_touchscreen.kl:system/usr/keylayout/sec_touchscreen.kl
 
 # Modules
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/bthid.ko:root/lib/modules/bthid.ko \
-    $(LOCAL_PATH)/prebuilt/sec_param.ko:root/lib/modules/sec_param.ko 
+    $(LOCAL_PATH)/prebuilt/cifs.ko:root/lib/modules/cifs.ko \
+    $(LOCAL_PATH)/prebuilt/dhd.ko:root/lib/modules/dhd.ko
 
 # LPM
 PRODUCT_COPY_FILES += \
@@ -110,8 +111,10 @@ PRODUCT_PACKAGES += \
     gralloc.msm7x30 \
     hwcomposer.msm7x30 \
     gps.msm7x30 \
+    lights.SGH-i847 \
     audio.primary.msm7x30 \
     audio_policy.msm7x30 \
+    audio_policy.conf \
     audio.a2dp.default
 
 PRODUCT_PACKAGES += \
@@ -119,7 +122,8 @@ PRODUCT_PACKAGES += \
     libOmxCore \
     libOmxVenc \
     libOmxVdec \
-    libstagefrighthw
+    libstagefrighthw \
+    libI420colorconvert
 
 PRODUCT_PACKAGES += \
     badblocks \
@@ -144,16 +148,16 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.debuggable=1
 
 #ifeq ($(TARGET_PREBUILT_KERNEL),)
-    LOCAL_KERNEL := $(LOCAL_PATH)/prebuilt/kernel
+#    LOCAL_KERNEL := $(LOCAL_PATH)/prebuilt/zImage
 #else
 #    LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 #endif
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_KERNEL):kernel
+#PRODUCT_COPY_FILES += \
+#    $(LOCAL_KERNEL):kernel
 
 # We have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
-$(call inherit-product, frameworks/base/build/phone-hdpi-512-dalvik-heap.mk)
-$(call inherit-product-if-exists, vendor/samsung/apache/device-vendor.mk)
+$(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
+#$(call inherit-product-if-exists, vendor/samsung/apache/device-vendor.mk)
