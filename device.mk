@@ -43,7 +43,7 @@ PRODUCT_COPY_FILES += \
 #        device/samsung/apache/gps.xml:system/vendor/etc/gps.xml \
 #        device/samsung/apache/gps.conf:system/etc/gps.conf
 
-$(call inherit-product, device/samsung/apache/device_base.mk)
+$(call inherit-product, device/samsung/apache/apache.mk)
 
 # See comment at the top of this file. This is where the other
 # half of the device-specific product definition file takes care
