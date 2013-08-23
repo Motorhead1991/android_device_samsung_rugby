@@ -19,7 +19,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, device/samsung/apache/apache.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full.mk)
 
-# Discard inherited values and use our own instead.
+# Specify phone tech before including full_phone
+$(call inherit-product, vendor/arearom/products/gsm.mk)
+
+# Inherit some common CM stuff.
+$(call inherit-product, vendor/arearom/products/common_full.mk)
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
 # Set those variables here to overwrite the inherited values.
